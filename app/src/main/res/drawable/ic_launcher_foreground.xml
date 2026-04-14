@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Moon crescent -->
+    <path
+        android:fillColor="#F5D76E"
+        android:pathData="M54,24 A26,26 0 1,0 54,76 A18,18 0 1,1 54,24Z"/>
+    <!-- Star 1 -->
+    <path
+        android:fillColor="#F5D76E"
+        android:pathData="M30,30 L32,36 L38,36 L33,40 L35,46 L30,42 L25,46 L27,40 L22,36 L28,36Z"/>
+    <!-- Star 2 -->
+    <path
+        android:fillColor="#A78BFA"
+        android:pathData="M75,25 L76,28 L79,28 L77,30 L78,33 L75,31 L72,33 L73,30 L71,28 L74,28Z"/>
+    <!-- Star 3 -->
+    <path
+        android:fillColor="#A78BFA"
+        android:pathData="M80,55 L81,58 L84,58 L82,60 L83,63 L80,61 L77,63 L78,60 L76,58 L79,58Z"/>
+    <!-- Z letters for sleep -->
+    <path
+        android:fillColor="#B0BEC5"
+        android:pathData="M68,38 L74,38 L68,44 L74,44"
+        android:strokeWidth="1.5"
+        android:strokeColor="#B0BEC5"/>
+</vector>
