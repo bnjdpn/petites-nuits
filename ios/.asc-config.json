@@ -1,0 +1,11 @@
+{
+  "bundle_id": "com.bnjdpn.petitesnuits",
+  "app_store_connect_id": "6764533941",
+  "team_id": "767SX34A7Z",
+  "primary_language": "fr-FR",
+  "sku": "petitesnuits-2026",
+  "platforms": ["iOS"],
+  "created_at": "2026-04-29",
+  "developer_apple_url": "https://developer.apple.com/account/resources/identifiers/list",
+  "asc_url": "https://appstoreconnect.apple.com/apps/6764533941/distribution"
+}
