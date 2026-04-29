@@ -2,9 +2,11 @@ import SwiftData
 import SwiftUI
 
 /// Onglet "Calendrier" — grille mensuelle lundi-first FR avec heatmap.
+/// Tap sur une cellule avec entrée → sheet d'édition.
 struct CalendrierView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var viewModel: CalendrierViewModel?
+    @State private var entryToEdit: NightEntry?
 
     var body: some View {
         NavigationStack {
@@ -26,6 +28,12 @@ struct CalendrierView: View {
             } else {
                 viewModel?.refresh()
             }
+            await viewModel?.observeNightChanges()
+        }
+        .sheet(item: $entryToEdit) { entry in
+            SaisieView(editing: entry) {
+                entryToEdit = nil
+            }
         }
     }
 
@@ -36,7 +44,8 @@ struct CalendrierView: View {
             CalendarGrid(
                 daysInMonth: viewModel.daysInMonth,
                 firstDayOffset: viewModel.firstDayOffsetMondayFirst,
-                entryForDay: { viewModel.entry(forDay: $0) }
+                entryForDay: { viewModel.entry(forDay: $0) },
+                onEntryTapped: { entry in entryToEdit = entry }
             )
             Spacer()
         }

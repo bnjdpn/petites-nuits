@@ -4,7 +4,8 @@ import SwiftData
 
 /// ViewModel de l'onglet "Graphique". Charge les 14 dernières nuits et
 /// expose `dataPoints` (BarMark durée + PointMark réveils) + un max relatif
-/// pour l'axe secondaire (risk #4 spec §5).
+/// pour l'axe secondaire (risk #4 spec §5). Observe `NightNotifications`
+/// pour se rafraîchir.
 @MainActor
 @Observable
 final class GraphiqueViewModel {
@@ -17,12 +18,14 @@ final class GraphiqueViewModel {
     }
 
     private let modelContext: ModelContext
+    private let notificationCenter: NotificationCenter
 
     private(set) var dataPoints: [DataPoint] = []
     private(set) var maxWakeUpsRelative: Int = 1
 
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, notificationCenter: NotificationCenter = .default) {
         self.modelContext = modelContext
+        self.notificationCenter = notificationCenter
     }
 
     func refresh() {
@@ -46,5 +49,14 @@ final class GraphiqueViewModel {
 
         let maxCount = dataPoints.map(\.wakeUpsCount).max() ?? 0
         maxWakeUpsRelative = max(1, maxCount) // floor 1 — évite divide-by-zero scaling
+    }
+
+    /// Observe les notifications de cycle de vie d'une `NightEntry` et
+    /// rafraîchit le graphique à chaque émission. À appeler depuis `.task {}`.
+    func observeNightChanges() async {
+        for await _ in NightNotifications.merged(on: notificationCenter) {
+            if Task.isCancelled { return }
+            refresh()
+        }
     }
 }

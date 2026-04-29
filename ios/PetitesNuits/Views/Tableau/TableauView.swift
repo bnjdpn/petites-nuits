@@ -2,9 +2,11 @@ import SwiftData
 import SwiftUI
 
 /// Onglet "Tableau" — liste chronologique inversée des nuits.
+/// Tap sur une row → sheet d'édition. Swipe → suppression.
 struct TableauView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var viewModel: TableauViewModel?
+    @State private var entryToEdit: NightEntry?
 
     var body: some View {
         NavigationStack {
@@ -23,6 +25,12 @@ struct TableauView: View {
                 let newViewModel = TableauViewModel(modelContext: modelContext)
                 newViewModel.refresh()
                 viewModel = newViewModel
+            }
+            await viewModel?.observeNightChanges()
+        }
+        .sheet(item: $entryToEdit) { entry in
+            SaisieView(editing: entry) {
+                entryToEdit = nil
             }
         }
     }
@@ -44,14 +52,19 @@ struct TableauView: View {
             ScrollView {
                 LazyVStack(spacing: Theme.Spacing.sm) {
                     ForEach(viewModel.entries) { entry in
-                        NightEntryRow(entry: entry)
-                            .swipeActions {
-                                Button(role: .destructive) {
-                                    try? viewModel.delete(entry: entry)
-                                } label: {
-                                    Label("Supprimer", systemImage: "trash")
-                                }
+                        Button {
+                            entryToEdit = entry
+                        } label: {
+                            NightEntryRow(entry: entry)
+                        }
+                        .buttonStyle(.plain)
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                try? viewModel.delete(entry: entry)
+                            } label: {
+                                Label("Supprimer", systemImage: "trash")
                             }
+                        }
                     }
                 }
                 .padding(Theme.Spacing.md)

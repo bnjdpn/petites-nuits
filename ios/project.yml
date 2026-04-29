@@ -70,3 +70,26 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
     dependencies:
       - target: PetitesNuits
+
+  PetitesNuitsScreenshotsUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: PetitesNuitsScreenshotsUITests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bnjdpn.petitesnuits.screenshotsuitests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: PetitesNuits
+
+schemes:
+  PetitesNuitsScreenshots:
+    build:
+      targets:
+        PetitesNuits: all
+        PetitesNuitsScreenshotsUITests: [test]
+    test:
+      gatherCoverageData: false
+      targets:
+        - PetitesNuitsScreenshotsUITests

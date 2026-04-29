@@ -1,0 +1,10 @@
+app_identifier("com.bnjdpn.petitesnuits")
+username("dupinbenjam@gmail.com")
+team_id("767SX34A7Z")
+metadata_path("./fastlane/metadata")
+screenshots_path("./fastlane/screenshots")
+submission_information({
+  export_compliance_uses_encryption: false,
+  export_compliance_encryption_updated: false
+})
+automatic_release(true)

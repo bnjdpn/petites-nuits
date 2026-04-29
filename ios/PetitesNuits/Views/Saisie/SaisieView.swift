@@ -1,12 +1,28 @@
 import SwiftData
 import SwiftUI
 
-/// Onglet "Saisie" — formulaire d'ajout d'une nuit.
+/// Onglet "Saisie" — formulaire d'ajout / édition d'une nuit.
+///
+/// Deux modes d'utilisation :
+/// - **création (par défaut)** : `SaisieView()` — l'utilisateur saisit
+///   une nouvelle nuit, save → insert.
+/// - **édition** : `SaisieView(editing: entry, onDismiss:)` — pré-rempli,
+///   save → update, bouton supprimer disponible. Utilisé en sheet depuis
+///   les onglets Tableau et Calendrier.
 struct SaisieView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     @State private var viewModel: SaisieViewModel?
     @State private var showingWakeUpSheet = false
     @State private var saveError: String?
+
+    private let editingEntry: NightEntry?
+    private let onDismiss: (() -> Void)?
+
+    init(editing: NightEntry? = nil, onDismiss: (() -> Void)? = nil) {
+        self.editingEntry = editing
+        self.onDismiss = onDismiss
+    }
 
     var body: some View {
         NavigationStack {
@@ -16,13 +32,24 @@ struct SaisieView: View {
                     formContent(viewModel: viewModel)
                 }
             }
-            .navigationTitle("Nouvelle nuit")
+            .navigationTitle(editingEntry == nil ? "Nouvelle nuit" : "Modifier la nuit")
             .toolbarBackground(Theme.veloursProfond, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
+            .toolbar {
+                if editingEntry != nil {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Fermer") {
+                            onDismiss?()
+                            dismiss()
+                        }
+                        .foregroundStyle(Theme.lumiereIvoire)
+                    }
+                }
+            }
         }
         .task {
             if viewModel == nil {
-                viewModel = SaisieViewModel(modelContext: modelContext)
+                viewModel = SaisieViewModel(modelContext: modelContext, editing: editingEntry)
             }
         }
     }
@@ -36,6 +63,9 @@ struct SaisieView: View {
                 wakeUpsSection(viewModel: viewModel)
                 notesSection(viewModel: viewModel)
                 saveButton(viewModel: viewModel)
+                if viewModel.isEditing {
+                    deleteButton(viewModel: viewModel)
+                }
             }
             .padding(Theme.Spacing.md)
         }
@@ -189,11 +219,15 @@ struct SaisieView: View {
         Button {
             do {
                 try viewModel.save()
+                if viewModel.isEditing {
+                    onDismiss?()
+                    dismiss()
+                }
             } catch {
                 saveError = error.localizedDescription
             }
         } label: {
-            Text("Enregistrer")
+            Text(viewModel.isEditing ? "Modifier" : "Enregistrer")
                 .font(Theme.body(.headline).weight(.semibold))
                 .foregroundStyle(Theme.veloursProfond)
                 .frame(maxWidth: .infinity)
@@ -201,7 +235,29 @@ struct SaisieView: View {
                 .background(Theme.etoileOr)
                 .clipShape(.rect(cornerRadius: Theme.cornerRadius))
         }
-        .accessibilityLabel(Text("Enregistrer la nuit"))
+        .accessibilityLabel(Text(viewModel.isEditing ? "Modifier la nuit" : "Enregistrer la nuit"))
+    }
+
+    @ViewBuilder
+    private func deleteButton(viewModel: SaisieViewModel) -> some View {
+        Button(role: .destructive) {
+            do {
+                try viewModel.deleteEditedEntry()
+                onDismiss?()
+                dismiss()
+            } catch {
+                saveError = error.localizedDescription
+            }
+        } label: {
+            Text("Supprimer")
+                .font(Theme.body(.headline).weight(.semibold))
+                .foregroundStyle(Mood.terrible.color)
+                .frame(maxWidth: .infinity)
+                .padding(Theme.Spacing.md)
+                .background(Theme.bleuLune)
+                .clipShape(.rect(cornerRadius: Theme.cornerRadius))
+        }
+        .accessibilityLabel(Text("Supprimer cette nuit"))
     }
 
     private func durationLabel(seconds: TimeInterval) -> String {

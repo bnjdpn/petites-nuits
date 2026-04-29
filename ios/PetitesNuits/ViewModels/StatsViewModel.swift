@@ -3,7 +3,8 @@ import Observation
 import SwiftData
 
 /// ViewModel de l'onglet "Stats". Aggregations sur l'ensemble du store +
-/// tendance 7j vs 7j précédents.
+/// tendance 7j vs 7j précédents. Observe `NightNotifications` pour se
+/// rafraîchir quand une nuit est ajoutée / modifiée / supprimée.
 @MainActor
 @Observable
 final class StatsViewModel {
@@ -14,6 +15,7 @@ final class StatsViewModel {
     }
 
     private let modelContext: ModelContext
+    private let notificationCenter: NotificationCenter
 
     private(set) var totalNights: Int = 0
     private(set) var averageDurationSeconds: TimeInterval?
@@ -24,8 +26,9 @@ final class StatsViewModel {
     /// 2% — sous ce delta on reste sur `.stable`.
     private let stableThresholdRatio = 0.02
 
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, notificationCenter: NotificationCenter = .default) {
         self.modelContext = modelContext
+        self.notificationCenter = notificationCenter
     }
 
     func refresh() {
@@ -69,5 +72,14 @@ final class StatsViewModel {
     private func average(durations entries: [NightEntry]) -> Double {
         let total = entries.reduce(0.0) { $0 + $1.sleepDurationSeconds }
         return total / Double(entries.count)
+    }
+
+    /// Observe les notifications de cycle de vie d'une `NightEntry` et
+    /// rafraîchit les stats à chaque émission. À appeler depuis `.task {}`.
+    func observeNightChanges() async {
+        for await _ in NightNotifications.merged(on: notificationCenter) {
+            if Task.isCancelled { return }
+            refresh()
+        }
     }
 }

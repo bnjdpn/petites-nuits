@@ -5,6 +5,7 @@ struct CalendarGrid: View {
     let daysInMonth: Int
     let firstDayOffset: Int
     let entryForDay: (Int) -> NightEntry?
+    var onEntryTapped: ((NightEntry) -> Void)?
 
     private static let columns: [GridItem] = Array(
         repeating: GridItem(.flexible(), spacing: Theme.Spacing.xs),
@@ -42,14 +43,22 @@ struct CalendarGrid: View {
     private func cell(forDay day: Int) -> some View {
         let entry = entryForDay(day)
         let fillColor = entry?.mood.color ?? Theme.bleuLune
-        ZStack {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(fillColor.opacity(entry == nil ? 0.4 : 0.85))
-            Text("\(day)")
-                .font(Theme.numerics(.callout).weight(.medium))
-                .foregroundStyle(entry == nil ? Theme.lumiereIvoire.opacity(0.6) : Theme.veloursProfond)
+        Button {
+            if let entry, let onEntryTapped {
+                onEntryTapped(entry)
+            }
+        } label: {
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(fillColor.opacity(entry == nil ? 0.4 : 0.85))
+                Text("\(day)")
+                    .font(Theme.numerics(.callout).weight(.medium))
+                    .foregroundStyle(entry == nil ? Theme.lumiereIvoire.opacity(0.6) : Theme.veloursProfond)
+            }
+            .frame(height: 40)
         }
-        .frame(height: 40)
+        .buttonStyle(.plain)
+        .disabled(entry == nil)
         .accessibilityLabel(accessibilityLabel(day: day, entry: entry))
     }
 

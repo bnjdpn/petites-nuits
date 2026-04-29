@@ -23,7 +23,10 @@ struct GraphiqueView: View {
                 let newViewModel = GraphiqueViewModel(modelContext: modelContext)
                 newViewModel.refresh()
                 viewModel = newViewModel
+            } else {
+                viewModel?.refresh()
             }
+            await viewModel?.observeNightChanges()
         }
     }
 

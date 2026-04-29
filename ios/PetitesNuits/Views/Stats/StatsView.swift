@@ -23,7 +23,10 @@ struct StatsView: View {
                 let newViewModel = StatsViewModel(modelContext: modelContext)
                 newViewModel.refresh()
                 viewModel = newViewModel
+            } else {
+                viewModel?.refresh()
             }
+            await viewModel?.observeNightChanges()
         }
     }
 

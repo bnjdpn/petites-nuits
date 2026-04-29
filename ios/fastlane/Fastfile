@@ -1,0 +1,77 @@
+default_platform(:ios)
+
+# Fastfile minimal pour petites-nuits.
+# Phase 2b — pas de match init (Phase 3). Les lanes `beta` et `release`
+# nécessitent que les certs/profils aient été configurés au préalable.
+
+ENV["LANG"] = "en_US.UTF-8"
+ENV["LC_ALL"] = "en_US.UTF-8"
+
+WORKSPACE = "PetitesNuits.xcodeproj"
+SCHEME = "PetitesNuits"
+
+before_all do
+  sh "xcodegen generate", error_callback: ->(_result) { UI.user_error!("xcodegen generate failed") } if File.exist?("../project.yml")
+end
+
+platform :ios do
+  desc "Run unit tests"
+  lane :tests do
+    run_tests(
+      project: WORKSPACE,
+      scheme: SCHEME,
+      devices: ["iPhone 17 Pro"],
+      xcodebuild_formatter: ""
+    )
+  end
+
+  desc "Generate localized screenshots (FR-only)"
+  lane :screenshots do
+    capture_screenshots(
+      project: WORKSPACE,
+      scheme: "PetitesNuitsScreenshots",
+      output_directory: "./fastlane/screenshots",
+      clear_previous_screenshots: true,
+      override_status_bar: true,
+      xcodebuild_formatter: ""
+    )
+  end
+
+  desc "Push metadata only (no binary)"
+  lane :metadata do
+    deliver(
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      force: true,
+      submit_for_review: false
+    )
+  end
+
+  desc "Build & upload to TestFlight"
+  lane :beta do
+    build_app(
+      project: WORKSPACE,
+      scheme: SCHEME,
+      export_method: "app-store",
+      xcodebuild_formatter: ""
+    )
+    upload_to_testflight(skip_waiting_for_build_processing: true)
+  end
+
+  desc "Build, upload, push metadata + screenshots, submit"
+  lane :release do
+    build_app(
+      project: WORKSPACE,
+      scheme: SCHEME,
+      export_method: "app-store",
+      xcodebuild_formatter: ""
+    )
+    upload_to_app_store(
+      skip_screenshots: false,
+      force: true,
+      submission_information: { export_compliance_uses_encryption: false },
+      submit_for_review: true,
+      automatic_release: true
+    )
+  end
+end

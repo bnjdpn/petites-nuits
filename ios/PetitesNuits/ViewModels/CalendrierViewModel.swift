@@ -4,20 +4,29 @@ import SwiftData
 
 /// ViewModel de l'onglet "Calendrier". Gère le mois sélectionné, la liste
 /// d'entrées du mois, et expose les helpers grid lundi-first FR (risk #3).
+/// Observe `NightNotifications` pour se rafraîchir quand une nuit est
+/// ajoutée / modifiée / supprimée depuis un autre onglet.
 @MainActor
 @Observable
 final class CalendrierViewModel {
     private let modelContext: ModelContext
     private let calendar: Calendar
+    private let notificationCenter: NotificationCenter
 
     var selectedMonth: Date
     private(set) var entries: [NightEntry] = []
 
-    init(modelContext: ModelContext, calendar: Calendar = .autoupdatingCurrent, now: Date = .now) {
+    init(
+        modelContext: ModelContext,
+        calendar: Calendar = .autoupdatingCurrent,
+        now: Date = .now,
+        notificationCenter: NotificationCenter = .default
+    ) {
         self.modelContext = modelContext
         var cal = calendar
         cal.firstWeekday = 2 // Monday — locale FR
         self.calendar = cal
+        self.notificationCenter = notificationCenter
         // Force selectedMonth = first of current month
         let components = cal.dateComponents([.year, .month], from: now)
         self.selectedMonth = cal.date(from: components) ?? now
@@ -84,5 +93,15 @@ final class CalendrierViewModel {
             return nil
         }
         return entries.first { $0.bedtime >= dayStart && $0.bedtime < dayEnd }
+    }
+
+    /// Observe les notifications de cycle de vie d'une `NightEntry` et
+    /// rafraîchit la liste à chaque émission. À appeler depuis `.task {}` —
+    /// se termine quand la `Task` est annulée.
+    func observeNightChanges() async {
+        for await _ in NightNotifications.merged(on: notificationCenter) {
+            if Task.isCancelled { return }
+            refresh()
+        }
     }
 }

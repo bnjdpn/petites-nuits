@@ -1,0 +1,22 @@
+excluded:
+  - PetitesNuits.xcodeproj
+  - fastlane
+  - PetitesNuitsScreenshotsUITests/SnapshotHelper.swift
+
+disabled_rules:
+  - todo
+
+line_length:
+  warning: 140
+  error: 200
+  ignores_comments: true
+
+identifier_name:
+  excluded:
+    - id
+
+opt_in_rules:
+  - empty_count
+  - first_where
+  - sorted_first_last
+  - toggle_bool
