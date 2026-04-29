@@ -1,0 +1,12 @@
+{
+  "app": "petites-nuits",
+  "phase": "locked",
+  "method": "stitch_autonomous",
+  "version": 1,
+  "stitch_project_id": "3195643534044095662",
+  "stitch_project_url": "https://stitch.withgoogle.com/?project=3195643534044095662",
+  "stitch_design_system_id": "16279403592182937452",
+  "locked_at": "2026-04-29",
+  "screens_status": "async_pending_or_failed",
+  "system_path": "design/system.md"
+}

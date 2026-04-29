@@ -1,0 +1,19 @@
+Petites Nuits est un journal calme et privé pour suivre le sommeil de votre bébé.
+
+Une nuit après l'autre, sans bruit, sans publicité, sans collecte de données. L'app garde tout sur votre iPhone — aucune information ne quitte votre appareil.
+
+Ce que vous pouvez faire :
+- Noter l'heure du coucher, l'heure du réveil et la durée totale.
+- Ajouter chaque réveil nocturne, sa durée, et préciser s'il s'agit d'une tétée ou d'un biberon.
+- Choisir un ressenti au réveil parmi cinq nuances.
+- Ajouter des notes libres pour vous souvenir d'une fièvre, d'une dent, d'une journée chargée.
+
+Ce que vous voyez :
+- Un calendrier mensuel coloré qui dessine la qualité des nuits d'un coup d'œil.
+- Un graphique sur deux semaines pour repérer les tendances.
+- Un tableau chronologique pour relire chaque nuit en détail.
+- Des statistiques douces — durée moyenne, réveils moyens, tendance sur sept jours.
+
+L'app est gratuite, sans pub, sans achat intégré, sans compte. Le code est ouvert et publié sur GitHub.
+
+Pensée pour les parents épuisés. Faite pour rester simple, lisible le matin tôt, et fidèle à votre intimité.
