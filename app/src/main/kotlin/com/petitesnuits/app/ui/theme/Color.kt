@@ -2,14 +2,14 @@ package com.petitesnuits.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val DeepNavy = Color(0xFF0B1026)
-val DarkBlue = Color(0xFF141B3D)
-val StarGold = Color(0xFFF5D76E)
-val Lavender = Color(0xFFA78BFA)
+val DeepNavy = Color(0xFF0A0E1F)
+val DarkBlue = Color(0xFF1A1F3A)
+val StarGold = Color(0xFFF5C76F)
+val Lavender = Color(0xFF5C6FAB)
 val WarmCoral = Color(0xFFFF8A80)
-val TextPrimary = Color(0xFFFFFFFF)
-val TextSecondary = Color(0xFFB0BEC5)
-val SurfaceDark = Color(0xFF1A2147)
+val TextPrimary = Color(0xFFF0EBE0)
+val TextSecondary = Color(0xB3F0EBE0)
+val SurfaceDark = Color(0xFF1A1F3A)
 
 val MoodGreat = Color(0xFF66BB6A)
 val MoodGood = Color(0xFFA5D6A7)

@@ -1,1 +1,3 @@
-Première version. Suivi simple et calme du sommeil de votre bébé.
+Petites finitions visuelles sur le graphique de duree.
+
+Le suivi du sommeil reste calme, simple et prive.

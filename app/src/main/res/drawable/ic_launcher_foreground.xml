@@ -4,26 +4,20 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Moon crescent -->
+    <!-- Abstract sleep-pattern curve -->
     <path
-        android:fillColor="#F5D76E"
-        android:pathData="M54,24 A26,26 0 1,0 54,76 A18,18 0 1,1 54,24Z"/>
-    <!-- Star 1 -->
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#F0EBE0"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M24,64 C36,44 48,44 58,58 C66,70 78,70 86,50"/>
+    <!-- Wake-up data point -->
     <path
-        android:fillColor="#F5D76E"
-        android:pathData="M30,30 L32,36 L38,36 L33,40 L35,46 L30,42 L25,46 L27,40 L22,36 L28,36Z"/>
-    <!-- Star 2 -->
+        android:fillColor="#F5C76F"
+        android:pathData="M58,58 m-6,0 a6,6 0 1,1 12,0 a6,6 0 1,1 -12,0"/>
+    <!-- Soft indigo anchor -->
     <path
-        android:fillColor="#A78BFA"
-        android:pathData="M75,25 L76,28 L79,28 L77,30 L78,33 L75,31 L72,33 L73,30 L71,28 L74,28Z"/>
-    <!-- Star 3 -->
-    <path
-        android:fillColor="#A78BFA"
-        android:pathData="M80,55 L81,58 L84,58 L82,60 L83,63 L80,61 L77,63 L78,60 L76,58 L79,58Z"/>
-    <!-- Z letters for sleep -->
-    <path
-        android:fillColor="#B0BEC5"
-        android:pathData="M68,38 L74,38 L68,44 L74,44"
-        android:strokeWidth="1.5"
-        android:strokeColor="#B0BEC5"/>
+        android:fillColor="#5C6FAB"
+        android:fillAlpha="0.38"
+        android:pathData="M22,76 Q54,88 86,76 L86,84 Q54,96 22,84 Z"/>
 </vector>

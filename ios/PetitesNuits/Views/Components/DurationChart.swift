@@ -27,7 +27,7 @@ struct DurationChart: View {
                     y: .value("Durée (h)", point.durationHours)
                 )
                 .foregroundStyle(Theme.indigoNuit)
-                .cornerRadius(4)
+                .clipShape(.rect(cornerRadius: 4))
 
                 // PointMark dans la même échelle Y, scaled.
                 PointMark(
