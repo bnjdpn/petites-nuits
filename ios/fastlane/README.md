@@ -39,6 +39,14 @@ Generate localized screenshots (FR-only)
 
 Push metadata only (no binary)
 
+### ios upload_screenshots
+
+```sh
+[bundle exec] fastlane ios upload_screenshots
+```
+
+Push screenshots only (no binary, no metadata)
+
 ### ios beta
 
 ```sh

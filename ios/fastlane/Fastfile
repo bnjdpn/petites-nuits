@@ -94,6 +94,21 @@ platform :ios do
     )
   end
 
+  desc "Push screenshots only (no binary, no metadata)"
+  lane :upload_screenshots do
+    api_key = load_api_key
+    upload_to_app_store(
+      api_key: api_key,
+      skip_binary_upload: true,
+      skip_metadata: true,
+      skip_screenshots: false,
+      overwrite_screenshots: true,
+      force: true,
+      run_precheck_before_submit: false,
+      screenshots_path: "./fastlane/screenshots"
+    )
+  end
+
   desc "Build & upload to TestFlight"
   lane :beta do
     api_key = load_api_key

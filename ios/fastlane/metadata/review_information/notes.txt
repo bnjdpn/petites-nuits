@@ -1,0 +1,1 @@
+No login required. App is fully usable offline. All sleep tracking features are available from the main tabs.
